@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.Domain", "GloboTicket.Domain\GloboTicket.Domain.csproj", "{39A8D196-2E3E-4236-9E27-1BA2D78C9394}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloboTicket.Domain", "GloboTicket.Domain\GloboTicket.Domain.csproj", "{39A8D196-2E3E-4236-9E27-1BA2D78C9394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.Infrastructure", "GloboTicket.Infrastructure\GloboTicket.Infrastructure.csproj", "{46D37854-B86C-4335-BAB1-8FC2C90C3044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloboTicket.Infrastructure", "GloboTicket.Infrastructure\GloboTicket.Infrastructure.csproj", "{46D37854-B86C-4335-BAB1-8FC2C90C3044}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.API", "GloboTicket.API\GloboTicket.API.csproj", "{1C07DFC1-1BF5-4702-85FE-DD8BBC863B55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloboTicket.API", "GloboTicket.API\GloboTicket.API.csproj", "{1C07DFC1-1BF5-4702-85FE-DD8BBC863B55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.SharedKernel", "GloboTicket.SharedKernel\GloboTicket.SharedKernel.csproj", "{99D1300C-833D-4892-945C-65D95D832A8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{1C07DFC1-1BF5-4702-85FE-DD8BBC863B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C07DFC1-1BF5-4702-85FE-DD8BBC863B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C07DFC1-1BF5-4702-85FE-DD8BBC863B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99D1300C-833D-4892-945C-65D95D832A8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D1300C-833D-4892-945C-65D95D832A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D1300C-833D-4892-945C-65D95D832A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D1300C-833D-4892-945C-65D95D832A8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

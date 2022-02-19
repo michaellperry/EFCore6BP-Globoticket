@@ -1,4 +1,6 @@
 ﻿using GloboTicket.Domain;
+using GloboTicket.Infrastructure.Configuration;
+using GloboTicket.SharedKernel.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +10,7 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
+        services.AddSingleton<IModelConfiguration, SqlModelConfiguration>();
         services.AddDbContext<GloboTicketContext>(options =>
         {
             options.UseSqlServer(connectionString, sqlOptions =>
