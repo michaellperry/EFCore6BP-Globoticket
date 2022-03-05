@@ -2,6 +2,13 @@ using GloboTicket.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add configuration sources
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration
+        .AddUserSecrets<Program>();
+}
+
 // Add services to the container.
 string connectionString = builder.Configuration
     .GetConnectionString("GloboTicketConnection");
