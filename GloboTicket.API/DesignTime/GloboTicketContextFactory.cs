@@ -20,7 +20,11 @@ public class GloboTicketContextFactory : IDesignTimeDbContextFactory<GloboTicket
         }
 
         var options = new DbContextOptionsBuilder<GloboTicketContext>()
-            .UseSqlServer(connectionString)
+            .UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.MigrationsAssembly(
+                    typeof(ServiceRegistration).Assembly.FullName);
+            })
             .Options;
         return new GloboTicketContext(options, new SqlModelConfiguration());
     }
