@@ -2,6 +2,10 @@ using GloboTicket.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add configuration sources
+builder.Configuration
+    .AddUserSecrets<Program>();
+
 // Add services to the container.
 string connectionString = builder.Configuration
     .GetConnectionString("GloboTicketConnection");
@@ -15,11 +19,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
