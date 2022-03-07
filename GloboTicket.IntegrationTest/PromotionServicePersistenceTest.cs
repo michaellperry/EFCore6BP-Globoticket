@@ -1,29 +1,40 @@
 using FluentAssertions;
-using GloboTicket.Domain;
 using GloboTicket.Domain.Entities;
 using GloboTicket.Domain.Services;
-using Microsoft.EntityFrameworkCore;
+using GloboTicket.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace GloboTicket.UnitTest;
+namespace GloboTicket.IntegrationTest;
 
-public class PromotionServiceTest
+public class PromotionServicePersistenceTest
 {
-    private readonly PromotionService promotionService;
+    private const string AppConnectionString = "GLOBOTICKET_APP_CONNECTION_STRING";
 
-    public PromotionServiceTest()
+    private PromotionService promotionService;
+
+    public PromotionServicePersistenceTest()
     {
-        var options = new DbContextOptionsBuilder<GloboTicketContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        var context = new GloboTicketContext(options, new TestModelConfiguration());
-        promotionService = new PromotionService(context);
+        var builder = Host.CreateDefaultBuilder();
+        builder.ConfigureServices((context, serviceCollection) =>
+        {
+            var connectionString = Environment.GetEnvironmentVariable(AppConnectionString);
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ApplicationException($"Please set the environment variable {AppConnectionString}");
+            }
+            serviceCollection.AddInfrastructure(connectionString);
+        });
+        var host = builder.Build();
+
+        promotionService = host.Services.GetRequiredService<PromotionService>();
     }
 
     [Fact]
-    public async Task CanBookAShow()
+    public async Task CanPersistAShow()
     {
         Venue venue = await GivenVenue();
         Act act = await GivenAct();
