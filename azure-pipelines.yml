@@ -16,8 +16,15 @@ steps:
   displayName: 'dotnet build'
   inputs:
     command: 'build'
-    projects: 'GloboTicket.API/GloboTicket.API.csproj'
-    arguments: '--configuration release'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: 'test'
+    projects: 'GloboTicket.UnitTest/GloboTicket.UnitTest.csproj'
+    arguments: '--configuration Release --no-build'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
