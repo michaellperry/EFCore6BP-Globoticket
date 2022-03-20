@@ -37,7 +37,8 @@ public class PromotionServiceTest
 
     private async Task<Show> WhenBookShow(Venue venue, Act act, DateTimeOffset date)
     {
-        return await promotionService.BookShow(venue, act, date);
+        Guid showGuid = Guid.NewGuid();
+        return await promotionService.BookShow(showGuid, venue, act, date);
     }
 
     private async Task<Act> GivenAct(
