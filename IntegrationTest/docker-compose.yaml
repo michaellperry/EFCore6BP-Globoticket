@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  test:
+    image: globoticket/integration-test:latest
+    environment:
+    - GLOBOTICKET_APP_PASSWORD=3Mw6dbFZ3QhvPTME6JzISw
+    - GLOBOTICKET_ADMIN_PASSWORD=hMe2l62qQNHcSpTFGWeCdQ
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+    - ACCEPT_EULA=Y
+    - SA_PASSWORD=hMe2l62qQNHcSpTFGWeCdQ
+    ports:
+    - "1433:1433"
