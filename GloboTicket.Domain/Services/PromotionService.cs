@@ -11,10 +11,11 @@ public class PromotionService
         this.context = context;
     }
 
-    public async Task<Show> BookShow(Venue venue, Act act, DateTimeOffset date)
+    public async Task<Show> BookShow(Guid showGuid, Venue venue, Act act, DateTimeOffset date)
     {
         var show = new Show
         {
+            ShowGuid = showGuid,
             Venue = venue,
             Act = act,
             Date = date
