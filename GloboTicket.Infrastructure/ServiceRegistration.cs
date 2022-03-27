@@ -10,6 +10,11 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new ArgumentException("Connection string cannot be null");
+        }
+        
         services.AddSingleton<IModelConfiguration, SqlModelConfiguration>();
         services.AddDbContext<GloboTicketContext>(options =>
         {
@@ -19,6 +24,7 @@ public static class ServiceRegistration
                     typeof(ServiceRegistration).Assembly.FullName);
             });
         });
+        services.AddDomain();
 
         return services;
     }
