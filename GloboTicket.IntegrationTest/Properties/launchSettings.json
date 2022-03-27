@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "GloboTicket.IntegrationTest": {
+      "commandName": "Project"
+    }
+  }
+}
