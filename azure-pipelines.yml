@@ -36,6 +36,15 @@ steps:
     zipAfterPublish: true
     modifyOutputPath: true
 
+- task: Docker@2
+  inputs:
+    containerRegistry: 'GloboTicket Registry'
+    repository: 'globoticket-migration'
+    command: 'buildAndPush'
+    Dockerfile: 'Migrations/Dockerfile'
+    buildContext: '$(System.DefaultWorkingDirectory)'
+    tags: '$(Build.BuildNumber)'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
