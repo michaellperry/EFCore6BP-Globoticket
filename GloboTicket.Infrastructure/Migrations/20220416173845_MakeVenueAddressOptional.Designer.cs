@@ -4,6 +4,7 @@ using GloboTicket.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GloboTicket.Infrastructure.Migrations
 {
     [DbContext(typeof(GloboTicketContext))]
-    partial class GloboTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20220416173845_MakeVenueAddressOptional")]
+    partial class MakeVenueAddressOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,7 @@ namespace GloboTicket.Infrastructure.Migrations
 
                     b.HasAlternateKey("ActGuid");
 
-                    b.ToTable("Act", (string)null);
+                    b.ToTable("Act");
                 });
 
             modelBuilder.Entity("GloboTicket.Domain.Entities.Show", b =>
@@ -73,7 +75,7 @@ namespace GloboTicket.Infrastructure.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Show", (string)null);
+                    b.ToTable("Show");
                 });
 
             modelBuilder.Entity("GloboTicket.Domain.Entities.Venue", b =>
@@ -100,7 +102,7 @@ namespace GloboTicket.Infrastructure.Migrations
 
                     b.HasAlternateKey("VenueGuid");
 
-                    b.ToTable("Venue", (string)null);
+                    b.ToTable("Venue");
                 });
 
             modelBuilder.Entity("GloboTicket.Domain.Entities.Show", b =>
