@@ -8,4 +8,14 @@ public class Show
     public Venue Venue { get; set; }
     public Act Act { get; set; }
     public DateTimeOffset Date { get; set; }
+
+    public Show(Venue venue, Act act)
+    {
+        Venue = venue;
+        Act = act;
+    }
+
+    private Show() : this(null!, null!)
+    { 
+    }
 }
