@@ -12,8 +12,7 @@ public class VenueConfiguration : IEntityTypeConfiguration<Venue>
             .HasAlternateKey(v => v.VenueGuid);
         builder
             .Property(v => v.Name)
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasMaxLength(100);
         builder
             .Property(v => v.Address)
             .HasMaxLength(300);
