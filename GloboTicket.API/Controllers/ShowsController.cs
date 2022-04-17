@@ -1,5 +1,6 @@
 ﻿using GloboTicket.API.Models;
 using GloboTicket.Domain;
+using GloboTicket.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class ShowsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ShowModel>>> GetShows()
     {
-        var shows = await context.Show
+        var shows = await context.Set<Show>()
             .Select(show => new ShowModel
             {
                 ActName = show.Act.Name,
