@@ -24,6 +24,7 @@ public class ListShowsQuery
                 VenueAddress = show.Venue.Address,
                 Date = show.Date
             })
+            .TagWithCallSite()
             .ToListAsync();
     }
 }
