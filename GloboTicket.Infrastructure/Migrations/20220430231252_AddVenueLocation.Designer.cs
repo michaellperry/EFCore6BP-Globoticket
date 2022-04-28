@@ -4,6 +4,7 @@ using GloboTicket.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace GloboTicket.Infrastructure.Migrations
 {
     [DbContext(typeof(GloboTicketContext))]
-    partial class GloboTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20220430231252_AddVenueLocation")]
+    partial class AddVenueLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,30 +79,6 @@ namespace GloboTicket.Infrastructure.Migrations
                     b.ToTable("Show");
                 });
 
-            modelBuilder.Entity("GloboTicket.Domain.Entities.TicketSale", b =>
-                {
-                    b.Property<int>("TicketSaleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketSaleId"), 1L, 1);
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShowId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TicketSaleGuid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TicketSaleId");
-
-                    b.HasIndex("ShowId");
-
-                    b.ToTable("TicketSale");
-                });
-
             modelBuilder.Entity("GloboTicket.Domain.Entities.Venue", b =>
                 {
                     b.Property<int>("VenueId")
@@ -113,10 +91,6 @@ namespace GloboTicket.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Point>("Location")
                         .HasColumnType("geography");
 
@@ -124,9 +98,6 @@ namespace GloboTicket.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("SeatingCapacity")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("VenueGuid")
                         .HasColumnType("uniqueidentifier");
@@ -155,22 +126,6 @@ namespace GloboTicket.Infrastructure.Migrations
                     b.Navigation("Act");
 
                     b.Navigation("Venue");
-                });
-
-            modelBuilder.Entity("GloboTicket.Domain.Entities.TicketSale", b =>
-                {
-                    b.HasOne("GloboTicket.Domain.Entities.Show", "Show")
-                        .WithMany("TicketSales")
-                        .HasForeignKey("ShowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Show");
-                });
-
-            modelBuilder.Entity("GloboTicket.Domain.Entities.Show", b =>
-                {
-                    b.Navigation("TicketSales");
                 });
 #pragma warning restore 612, 618
         }

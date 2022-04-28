@@ -8,6 +8,7 @@ public static class DomainServiceRegistration
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
         services.AddScoped<PromotionService>();
+        services.AddScoped<SalesService>();
         return services;
     }
 }

@@ -8,7 +8,11 @@ namespace GloboTicket.Infrastructure;
 
 public static class ServiceRegistration
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        string connectionString,
+        bool isDevelopment
+    )
     {
         if (string.IsNullOrEmpty(connectionString))
         {
@@ -22,7 +26,12 @@ public static class ServiceRegistration
             {
                 sqlOptions.MigrationsAssembly(
                     typeof(ServiceRegistration).Assembly.FullName);
+                sqlOptions.UseNetTopologySuite();
             });
+            if (isDevelopment)
+            {
+                options.EnableSensitiveDataLogging();
+            }
         });
         services.AddDomain();
 

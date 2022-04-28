@@ -1,4 +1,7 @@
-﻿using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Models;
+using NetTopologySuite.Geometries;
+using Microsoft.EntityFrameworkCore;
 
 namespace GloboTicket.Domain.Services;
 
@@ -11,8 +14,20 @@ public class PromotionService
         this.context = context;
     }
 
-    public async Task<Show> BookShow(Guid showGuid, Venue venue, Act act, DateTimeOffset date)
+    public async Task<Show> BookShow(Guid showGuid, Guid venueGuid, Guid actGuid, DateTimeOffset date)
     {
+        var venue = context.Set<Venue>().SingleOrDefault(v => v.VenueGuid == venueGuid);
+        if (venue is null)
+        {
+            throw new ArgumentException($"No venue found for guid {venueGuid}");
+        }
+
+        var act = context.Set<Act>().SingleOrDefault(a => a.ActGuid == actGuid);
+        if (act is null)
+        {
+            throw new ArgumentException($"No act found for guid {actGuid}");
+        }
+
         var show = new Show(venue, act)
         {
             ShowGuid = showGuid,
@@ -25,13 +40,15 @@ public class PromotionService
         return show;
     }
 
-    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address)
+    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address, Point? location, int seatingCapacity)
     {
         var venue = new Venue
         {
             VenueGuid = venueGuid,
             Name = name,
-            Address = address
+            Address = address,
+            Location = location,
+            SeatingCapacity = seatingCapacity
         };
 
         await context.AddAsync(venue);
@@ -52,5 +69,52 @@ public class PromotionService
         await context.SaveChangesAsync();
 
         return act;
+    }
+
+    public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(
+        Point search,
+        int meters,
+        DateTimeOffset start,
+        DateTimeOffset end,
+        Func<Guid, string> getHrefShow
+    )
+    {
+        var shows = await context.Set<Show>()
+            .Include(s => s.Venue)
+            .Include(s => s.Act)
+            .Include(s => s.TicketSales)
+            .Where(s =>
+                s.Date >= start && s.Date < end &&
+                s.Venue.Location != null &&
+                s.Venue.Location.IsWithinDistance(search, meters))
+            .OrderBy(s => s.Venue.Location!.Distance(search))
+            .ToListAsync();
+        var showResults = shows
+            .Select(s => new ShowResult
+            {
+                HrefShow = getHrefShow(s.ShowGuid),
+                VenueName = s.Venue.Name,
+                VenueAddress = s.Venue.Address,
+                Latitude = s.Venue.Location?.Y,
+                Longitude = s.Venue.Location?.X,
+                Distance = s.Venue.Location?.Distance(search),
+                ActName = s.Act.Name,
+                Date = s.Date,
+                SeatsAvailable = s.Venue.SeatingCapacity - s.TicketSales.Sum(ts => ts.Quantity)
+            })
+            .ToList();
+        return showResults;
+    }
+
+    public async Task RescheduleShow(Guid showGuid, DateTimeOffset date)
+    {
+        var show = context.Set<Show>().SingleOrDefault(s => s.ShowGuid == showGuid);
+        if (show is null)
+        {
+            throw new ArgumentException($"No show found for guid {showGuid}");
+        }
+
+        show.Date = date;
+        await context.SaveChangesAsync();
     }
 }
