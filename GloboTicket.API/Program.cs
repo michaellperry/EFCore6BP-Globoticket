@@ -1,3 +1,4 @@
+using GloboTicket.API;
 using GloboTicket.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ if (builder.Environment.IsDevelopment())
 // Add services to the container.
 string connectionString = builder.Configuration
     .GetConnectionString("GloboTicketConnection");
+builder.Services.AddApi();
 builder.Services.AddInfrastructure(connectionString);
 
 builder.Services.AddControllers();
