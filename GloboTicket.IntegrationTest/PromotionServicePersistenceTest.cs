@@ -49,6 +49,20 @@ public class PromotionServicePersistenceTest
         show.Venue.Location.Should().Be(location);
     }
 
+    [Fact]
+    public async Task CanFindVenueByDistance()
+    {
+        Venue aac = await GivenVenue(
+            name: "American Airlines Center",
+            location: new Point(-96.8124434, 32.7903953));
+        Venue sr = await GivenVenue(
+            name: "The State Room",
+            location: new Point(-111.8906558, 40.7552824));
+
+        Point search = new Point(-96.8104113, 33.0782868);
+        promotionService.Find
+    }
+
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
     {
         Guid showGuid = Guid.NewGuid();
