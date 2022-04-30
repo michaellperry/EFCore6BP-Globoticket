@@ -1,6 +1,7 @@
 ﻿using GloboTicket.API.Commands;
 using GloboTicket.API.Models;
 using GloboTicket.API.Queries;
+using GloboTicket.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GloboTicket.API.Controllers;
@@ -21,8 +22,19 @@ public class ShowsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ShowModel>>> GetShows()
     {
-        List<ShowModel> shows = await listShowsQuery.Execute();
-        return Ok(shows);
+        List<Show> shows = await listShowsQuery.Execute();
+        List<ShowModel> showModels = shows
+            .Select(show => new ShowModel
+            {
+                ActName = show.Act.Name,
+                VenueName = show.Venue.Name,
+                VenueAddress = show.Venue.Address,
+                Date = show.Date,
+
+                HrefShow = Url.Action(nameof(UpdateShow), new { showGuid = show.ShowGuid })!
+            })
+            .ToList();
+        return Ok(showModels);
     }
 
     [HttpPatch]
