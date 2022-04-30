@@ -40,16 +40,16 @@ public class PromotionServicePersistenceTest
         Act act = await GivenAct();
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
 
-        Show show = await WhenBookShow(venue, act, date);
+        Show show = await WhenBookShow(venue.VenueGuid, act.ActGuid, date);
 
         show.Venue.Name.Should().Be(venue.Name);
         show.Act.Name.Should().Be(act.Name);
     }
 
-    private async Task<Show> WhenBookShow(Venue venue, Act act, DateTimeOffset date)
+    private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
     {
         Guid showGuid = Guid.NewGuid();
-        return await promotionService.BookShow(showGuid, venue, act, date);
+        return await promotionService.BookShow(showGuid, venueGuid, actGuid, date);
     }
 
     private async Task<Act> GivenAct(
