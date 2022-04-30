@@ -1,4 +1,5 @@
-﻿using GloboTicket.API.Models;
+﻿using GloboTicket.API.Commands;
+using GloboTicket.API.Models;
 using GloboTicket.API.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace GloboTicket.API.Controllers;
 public class ShowsController : ControllerBase
 {
     private readonly ListShowsQuery listShowsQuery;
+    private readonly RescheduleShowCommand rescheduleShowCommand;
 
-    public ShowsController(ListShowsQuery listShowsQuery)
+    public ShowsController(ListShowsQuery listShowsQuery, RescheduleShowCommand updateShowCommand)
     {
         this.listShowsQuery = listShowsQuery;
+        this.rescheduleShowCommand = updateShowCommand;
     }
 
     [HttpGet]
@@ -20,5 +23,13 @@ public class ShowsController : ControllerBase
     {
         List<ShowModel> shows = await listShowsQuery.Execute();
         return Ok(shows);
+    }
+
+    [HttpPut]
+    [Route("{showGuid}")]
+    public async Task<ActionResult> UpdateShow([FromRoute]Guid showGuid, [FromBody] ShowModel updatedShow)
+    {
+        await rescheduleShowCommand.Execute(showGuid, updatedShow.Date);
+        return Ok();
     }
 }
