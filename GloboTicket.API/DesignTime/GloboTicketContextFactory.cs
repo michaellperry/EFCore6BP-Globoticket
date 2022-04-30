@@ -23,6 +23,7 @@ public class GloboTicketContextFactory : IDesignTimeDbContextFactory<GloboTicket
             {
                 sqlOptions.MigrationsAssembly(
                     typeof(ServiceRegistration).Assembly.FullName);
+                sqlOptions.UseNetTopologySuite();
             })
             .Options;
         return new GloboTicketContext(options, new DesignTimeModelConfiguration());
