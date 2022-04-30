@@ -1,4 +1,5 @@
 ﻿using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Models;
 using NetTopologySuite.Geometries;
 
 namespace GloboTicket.Domain.Services;
@@ -66,5 +67,10 @@ public class PromotionService
         await context.SaveChangesAsync();
 
         return act;
+    }
+
+    public Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int miles, DateTimeOffset start, DateTimeOffset end)
+    {
+        throw new NotImplementedException();
     }
 }
