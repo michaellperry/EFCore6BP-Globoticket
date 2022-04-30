@@ -25,11 +25,14 @@ public class ShowsController : ControllerBase
         return Ok(shows);
     }
 
-    [HttpPut]
+    [HttpPatch]
     [Route("{showGuid}")]
-    public async Task<ActionResult> UpdateShow([FromRoute]Guid showGuid, [FromBody] ShowModel updatedShow)
+    public async Task<ActionResult> UpdateShow([FromRoute]Guid showGuid, [FromBody] ShowPatchModel showPatch)
     {
-        await rescheduleShowCommand.Execute(showGuid, updatedShow.Date);
+        if (showPatch.Date is DateTimeOffset date)
+        {
+            await rescheduleShowCommand.Execute(showGuid, date);
+        }
         return Ok();
     }
 }
