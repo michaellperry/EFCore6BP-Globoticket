@@ -19,4 +19,8 @@
     <ProjectReference Include="..\GloboTicket.SharedKernel\GloboTicket.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite" Version="2.4.0" />
+  </ItemGroup>
+
 </Project>
