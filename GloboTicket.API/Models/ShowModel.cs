@@ -6,5 +6,7 @@
         public string VenueName { get; set; } = "";
         public string? VenueAddress { get; set; }
         public DateTimeOffset Date { get; set; }
+
+        public string HrefShow { get; set; } = "";
     }
 }

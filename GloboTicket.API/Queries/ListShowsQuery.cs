@@ -14,17 +14,14 @@ public class ListShowsQuery
         this.context = context;
     }
 
-    public async Task<List<ShowModel>> Execute()
+    public async Task<List<Show>> Execute()
     {
-        return await context.Set<Show>()
-            .Select(show => new ShowModel
-            {
-                ActName = show.Act.Name,
-                VenueName = show.Venue.Name,
-                VenueAddress = show.Venue.Address,
-                Date = show.Date
-            })
+        var shows = await context.Set<Show>()
+            .Include(show => show.Act)
+            .Include(show => show.Venue)
             .TagWithCallSite()
             .ToListAsync();
+
+        return shows;
     }
 }
