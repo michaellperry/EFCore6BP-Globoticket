@@ -1,11 +1,13 @@
 using FluentAssertions;
 using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Models;
 using GloboTicket.Domain.Services;
 using GloboTicket.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetTopologySuite.Geometries;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -58,15 +60,24 @@ public class PromotionServicePersistenceTest
         Venue sr = await GivenVenue(
             name: "The State Room",
             location: new Point(-111.8906558, 40.7552824));
+        Act act = await GivenAct();
+        DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
+        await GivenShow(aac.VenueGuid, act.ActGuid, date);
+        await GivenShow(sr.VenueGuid, act.ActGuid, date);
 
         Point search = new Point(-96.8104113, 33.0782868);
-        promotionService.Find
+        var venues = await WhenFindShowsByDistanceAndDateRange(search, 50, date, date.AddDays(1));
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
     {
         Guid showGuid = Guid.NewGuid();
         return await promotionService.BookShow(showGuid, venueGuid, actGuid, date);
+    }
+
+    private async Task<List<ShowResult>> WhenFindShowsByDistanceAndDateRange(Point search, int miles, DateTimeOffset start, DateTimeOffset end)
+    {
+        return await promotionService.FindShowsByDistanceAndDateRange(search, miles, start, end);
     }
 
     private async Task<Act> GivenAct(
@@ -85,5 +96,11 @@ public class PromotionServicePersistenceTest
     {
         Guid venueGuid = Guid.NewGuid();
         return await promotionService.CreateVenue(venueGuid, name, address, location);
+    }
+
+    private async Task<Show> GivenShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
+    {
+        Guid showGuid = Guid.NewGuid();
+        return await promotionService.BookShow(showGuid, venueGuid, actGuid, date);
     }
 }
