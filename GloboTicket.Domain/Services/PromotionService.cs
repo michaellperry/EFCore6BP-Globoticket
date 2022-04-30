@@ -11,8 +11,20 @@ public class PromotionService
         this.context = context;
     }
 
-    public async Task<Show> BookShow(Guid showGuid, Venue venue, Act act, DateTimeOffset date)
+    public async Task<Show> BookShow(Guid showGuid, Guid venueGuid, Guid actGuid, DateTimeOffset date)
     {
+        var venue = context.Set<Venue>().SingleOrDefault(v => v.VenueGuid == venueGuid);
+        if (venue is null)
+        {
+            throw new ArgumentException($"No venue found for guid {venueGuid}");
+        }
+
+        var act = context.Set<Act>().SingleOrDefault(a => a.ActGuid == actGuid);
+        if (act is null)
+        {
+            throw new ArgumentException($"No act found for guid {actGuid}");
+        }
+
         var show = new Show(venue, act)
         {
             ShowGuid = showGuid,
