@@ -1,4 +1,5 @@
 ﻿using GloboTicket.Domain.Entities;
+using NetTopologySuite.Geometries;
 
 namespace GloboTicket.Domain.Services;
 
@@ -37,13 +38,14 @@ public class PromotionService
         return show;
     }
 
-    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address)
+    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address, Point? location)
     {
         var venue = new Venue
         {
             VenueGuid = venueGuid,
             Name = name,
-            Address = address
+            Address = address,
+            Location = location
         };
 
         await context.AddAsync(venue);

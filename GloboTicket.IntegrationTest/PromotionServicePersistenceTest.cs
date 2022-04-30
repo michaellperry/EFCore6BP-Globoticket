@@ -4,6 +4,7 @@ using GloboTicket.Domain.Services;
 using GloboTicket.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetTopologySuite.Geometries;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -36,7 +37,8 @@ public class PromotionServicePersistenceTest
     [Fact]
     public async Task CanPersistAShow()
     {
-        Venue venue = await GivenVenue();
+        Point location = new Point(-96.8124434, 32.7903953);
+        Venue venue = await GivenVenue(location: location);
         Act act = await GivenAct();
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
 
@@ -44,6 +46,7 @@ public class PromotionServicePersistenceTest
 
         show.Venue.Name.Should().Be(venue.Name);
         show.Act.Name.Should().Be(act.Name);
+        show.Venue.Location.Should().Be(location);
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
@@ -62,10 +65,11 @@ public class PromotionServicePersistenceTest
 
     private async Task<Venue> GivenVenue(
         string name = "Test Arena",
-        string address = "100 Test Street, Testertown, TS 99999"
+        string address = "100 Test Street, Testertown, TS 99999",
+        Point? location = null
     )
     {
         Guid venueGuid = Guid.NewGuid();
-        return await promotionService.CreateVenue(venueGuid, name, address);
+        return await promotionService.CreateVenue(venueGuid, name, address, location);
     }
 }
