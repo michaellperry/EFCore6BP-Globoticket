@@ -80,27 +80,37 @@ public class PromotionService
     )
     {
         var shows = await context.Set<Show>()
-            .Include(s => s.Venue)
-            .Include(s => s.Act)
-            .Include(s => s.TicketSales)
             .Where(s =>
                 s.Date >= start && s.Date < end &&
                 s.Venue.Location != null &&
                 s.Venue.Location.IsWithinDistance(search, meters))
             .OrderBy(s => s.Venue.Location!.Distance(search))
+            .Select(s => new
+            {
+                ShowGuid = s.ShowGuid,
+                VenueName = s.Venue.Name,
+                VenueAddress = s.Venue.Address,
+                Latitude = s.Venue.Location!.Y,
+                Longitude = s.Venue.Location!.X,
+                Distance = s.Venue.Location!.Distance(search),
+                ActName = s.Act.Name,
+                Date = s.Date,
+                SeatsAvailable = s.Venue.SeatingCapacity - s.TicketSales.Sum(ts => ts.Quantity)
+            })
+            .TagWithCallSite()
             .ToListAsync();
         var showResults = shows
             .Select(s => new ShowResult
             {
                 HrefShow = getHrefShow(s.ShowGuid),
-                VenueName = s.Venue.Name,
-                VenueAddress = s.Venue.Address,
-                Latitude = s.Venue.Location?.Y,
-                Longitude = s.Venue.Location?.X,
-                Distance = s.Venue.Location?.Distance(search),
-                ActName = s.Act.Name,
+                VenueName = s.VenueName,
+                VenueAddress = s.VenueAddress,
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                Distance = s.Distance,
+                ActName = s.ActName,
                 Date = s.Date,
-                SeatsAvailable = s.Venue.SeatingCapacity - s.TicketSales.Sum(ts => ts.Quantity)
+                SeatsAvailable = s.SeatsAvailable
             })
             .ToList();
         return showResults;
