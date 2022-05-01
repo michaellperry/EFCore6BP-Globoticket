@@ -85,8 +85,9 @@ public class PromotionService
                 VenueName = s.Venue.Name,
                 VenueAddress = s.Venue.Address,
                 VenueLocation = s.Venue.Location,
+                Distance = s.Venue.Location?.Distance(search),
                 ActName = s.Act.Name,
-                Distance = s.Venue.Location?.Distance(search)
+                Date = s.Date
             })
             .ToList();
         return showResults;
