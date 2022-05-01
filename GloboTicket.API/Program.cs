@@ -1,4 +1,3 @@
-using GloboTicket.API;
 using GloboTicket.Infrastructure;
 using Microsoft.IdentityModel.Logging;
 
@@ -15,7 +14,6 @@ if (builder.Environment.IsDevelopment())
 // Add services to the container.
 string connectionString = builder.Configuration
     .GetConnectionString("GloboTicketConnection");
-builder.Services.AddApi();
 builder.Services.AddInfrastructure(connectionString, builder.Environment.IsDevelopment());
 
 builder.Services.AddControllers();
