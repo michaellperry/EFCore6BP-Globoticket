@@ -1,6 +1,7 @@
 ﻿using GloboTicket.Domain.Entities;
 using GloboTicket.Domain.Models;
 using NetTopologySuite.Geometries;
+using Microsoft.EntityFrameworkCore;
 
 namespace GloboTicket.Domain.Services;
 
@@ -69,8 +70,25 @@ public class PromotionService
         return act;
     }
 
-    public Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int miles, DateTimeOffset start, DateTimeOffset end)
+    public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
     {
-        throw new NotImplementedException();
+        var shows = await context.Set<Show>()
+            .Where(s =>
+                s.Date >= start && s.Date < end &&
+                (s.Venue.Location == null || s.Venue.Location.IsWithinDistance(search, meters)))
+            .OrderBy(s => s.Venue.Location!.Distance(search))
+            .ToListAsync();
+        var showResults = shows
+            .Select(s => new ShowResult
+            {
+                ShowGuid = s.ShowGuid,
+                VenueName = s.Venue.Name,
+                VenueAddress = s.Venue.Address,
+                VenueLocation = s.Venue.Location,
+                ActName = s.Act.Name,
+                Distance = s.Venue.Location?.Distance(search)
+            })
+            .ToList();
+        return showResults;
     }
 }
