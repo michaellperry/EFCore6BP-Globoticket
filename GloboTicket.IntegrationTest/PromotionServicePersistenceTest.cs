@@ -72,6 +72,8 @@ public class PromotionServicePersistenceTest
         Point search = GeographicLocation(33.0782868, -96.8104113);
         var shows = await WhenFindShowsByDistanceAndDateRange(search, 100_000, date, date.AddDays(1));
         shows.Count.Should().Be(1);
+        shows[0].VenueName.Should().Be(aac.Name);
+        shows[0].ActName.Should().Be(act.Name);
         shows[0].SeatsAvailable.Should().Be(aac.SeatingCapacity-3);
     }
 
