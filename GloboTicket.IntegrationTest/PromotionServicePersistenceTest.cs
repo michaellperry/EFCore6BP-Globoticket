@@ -58,7 +58,8 @@ public class PromotionServicePersistenceTest
     {
         Venue aac = await GivenVenue(
             name: "American Airlines Center",
-            location: GeographicLocation(32.7903953, -96.8124434));
+            location: GeographicLocation(32.7903953, -96.8124434),
+            seatingCapacity: 20_000);
         Venue sr = await GivenVenue(
             name: "The State Room",
             location: GeographicLocation(40.7552824, -111.8906558));
@@ -96,11 +97,12 @@ public class PromotionServicePersistenceTest
     private async Task<Venue> GivenVenue(
         string name = "Test Arena",
         string address = "100 Test Street, Testertown, TS 99999",
-        Point? location = null
+        Point? location = null,
+        int seatingCapacity = 1000
     )
     {
         Guid venueGuid = Guid.NewGuid();
-        return await promotionService.CreateVenue(venueGuid, name, address, location);
+        return await promotionService.CreateVenue(venueGuid, name, address, location, seatingCapacity);
     }
 
     private async Task<Show> GivenShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
