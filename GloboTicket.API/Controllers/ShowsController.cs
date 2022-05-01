@@ -1,7 +1,5 @@
 ﻿using GloboTicket.API.Commands;
 using GloboTicket.API.Models;
-using GloboTicket.API.Queries;
-using GloboTicket.Domain.Entities;
 using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +9,11 @@ namespace GloboTicket.API.Controllers;
 [ApiController]
 public class ShowsController : ControllerBase
 {
-    private readonly ListShowsQuery listShowsQuery;
     private readonly PromotionService promotionService;
     private readonly RescheduleShowCommand rescheduleShowCommand;
 
-    public ShowsController(ListShowsQuery listShowsQuery, RescheduleShowCommand updateShowCommand, PromotionService promotionService)
+    public ShowsController(RescheduleShowCommand updateShowCommand, PromotionService promotionService)
     {
-        this.listShowsQuery = listShowsQuery;
         this.rescheduleShowCommand = updateShowCommand;
         this.promotionService = promotionService;
     }
