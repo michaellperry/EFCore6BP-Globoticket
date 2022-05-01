@@ -10,11 +10,9 @@ namespace GloboTicket.API.Controllers;
 public class ShowsController : ControllerBase
 {
     private readonly PromotionService promotionService;
-    private readonly RescheduleShowCommand rescheduleShowCommand;
 
-    public ShowsController(RescheduleShowCommand updateShowCommand, PromotionService promotionService)
+    public ShowsController(PromotionService promotionService)
     {
-        this.rescheduleShowCommand = updateShowCommand;
         this.promotionService = promotionService;
     }
 
@@ -66,7 +64,7 @@ public class ShowsController : ControllerBase
     {
         if (showPatch.Date is DateTimeOffset date)
         {
-            await rescheduleShowCommand.Execute(showGuid, date);
+            await promotionService.RescheduleShow(showGuid, date);
         }
         return Ok();
     }
