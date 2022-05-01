@@ -1,5 +1,6 @@
 ﻿using GloboTicket.API.Commands;
 using GloboTicket.API.Models;
+using GloboTicket.Domain.Models;
 using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ public class ShowsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ShowModel>>> GetShows(
+    public async Task<ActionResult<IEnumerable<ShowResult>>> GetShows(
         [FromQuery] DateTimeOffset? start = null,
         [FromQuery] DateTimeOffset? end = null,
         [FromQuery] double? latitude = null,
@@ -37,21 +38,10 @@ public class ShowsController : ControllerBase
                 GeographicLocation(latitudeVal, longitudeVal),
                 metersVal,
                 startVal,
-                endVal
+                endVal,
+                showGuid => Url.Action(nameof(UpdateShow), new { showGuid })!
             );
-            List<ShowModel> showModels = showResults
-                .Select(showResult => new ShowModel
-                {
-                    ActName = showResult.ActName,
-                    VenueName = showResult.VenueName,
-                    VenueAddress = showResult.VenueAddress,
-                    Date = showResult.Date,
-                    SeatsAvailable = showResult.SeatsAvailable,
-
-                    HrefShow = Url.Action(nameof(UpdateShow), new { showGuid = showResult.ShowGuid })!
-                })
-                .ToList();
-            return Ok(showModels);
+            return Ok(showResults);
         }
         else
         {

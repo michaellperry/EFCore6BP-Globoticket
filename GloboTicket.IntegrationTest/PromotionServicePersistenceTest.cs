@@ -85,7 +85,7 @@ public class PromotionServicePersistenceTest
 
     private async Task<List<ShowResult>> WhenFindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
     {
-        return await promotionService.FindShowsByDistanceAndDateRange(search, meters, start, end);
+        return await promotionService.FindShowsByDistanceAndDateRange(search, meters, start, end, showGuid => "");
     }
 
     private async Task<Act> GivenAct(
