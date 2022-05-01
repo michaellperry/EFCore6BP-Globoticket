@@ -46,6 +46,7 @@ public class ShowsController : ControllerBase
                     VenueName = showResult.VenueName,
                     VenueAddress = showResult.VenueAddress,
                     Date = showResult.Date,
+                    SeatsAvailable = showResult.SeatsAvailable,
 
                     HrefShow = Url.Action(nameof(UpdateShow), new { showGuid = showResult.ShowGuid })!
                 })
