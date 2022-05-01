@@ -4,6 +4,7 @@ using GloboTicket.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace GloboTicket.Infrastructure.Migrations
 {
     [DbContext(typeof(GloboTicketContext))]
-    partial class GloboTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20220501131136_AddTicketSalesAndSeatingCapacity")]
+    partial class AddTicketSalesAndSeatingCapacity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
