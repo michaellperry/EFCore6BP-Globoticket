@@ -27,7 +27,7 @@ public class SalesService
             TicketSaleGuid = ticketSaleGuid,
             Quantity = quantity
         };
-        context.Add(ticketSale);
+        await context.AddAsync(ticketSale);
         await context.SaveChangesAsync();
 
         return ticketSale;

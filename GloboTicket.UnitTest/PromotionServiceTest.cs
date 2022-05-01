@@ -55,10 +55,11 @@ public class PromotionServiceTest
     private async Task<Venue> GivenVenue(
         string name = "Test Arena",
         string address = "100 Test Street, Testertown, TS 99999",
-        Point? location = null
+        Point? location = null,
+        int seatingCapacity = 1000
     )
     {
         Guid venueGuid = Guid.NewGuid();
-        return await promotionService.CreateVenue(venueGuid, name, address, location);
+        return await promotionService.CreateVenue(venueGuid, name, address, location, seatingCapacity);
     }
 }
