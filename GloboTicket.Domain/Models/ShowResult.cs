@@ -4,7 +4,7 @@ namespace GloboTicket.Domain.Models;
 
 public class ShowResult
 {
-    public Guid ShowGuid { get; set; }
+    public string HrefShow { get; set; } = "";
     public string VenueName { get; set; } = "";
     public string? VenueAddress { get; set; }
     public Point? VenueLocation { get; set; }
