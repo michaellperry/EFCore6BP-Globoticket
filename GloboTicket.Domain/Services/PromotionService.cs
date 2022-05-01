@@ -71,7 +71,13 @@ public class PromotionService
         return act;
     }
 
-    public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
+    public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(
+        Point search,
+        int meters,
+        DateTimeOffset start,
+        DateTimeOffset end,
+        Func<Guid, string> getHrefShow
+    )
     {
         var shows = await context.Set<Show>()
             .Include(s => s.Venue)
@@ -85,7 +91,7 @@ public class PromotionService
         var showResults = shows
             .Select(s => new ShowResult
             {
-                ShowGuid = s.ShowGuid,
+                HrefShow = getHrefShow(s.ShowGuid),
                 VenueName = s.Venue.Name,
                 VenueAddress = s.Venue.Address,
                 VenueLocation = s.Venue.Location,
