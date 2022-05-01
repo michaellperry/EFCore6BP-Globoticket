@@ -1,5 +1,6 @@
 using GloboTicket.API;
 using GloboTicket.Infrastructure;
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Configuration
         .AddUserSecrets<Program>();
+    IdentityModelEventSource.ShowPII = true;
 }
 
 // Add services to the container.
@@ -16,7 +18,7 @@ string connectionString = builder.Configuration
     ?? throw new InvalidOperationException("Please provide a value for connection string GloboTicketConnection.");
 
 builder.Services.AddApi();
-builder.Services.AddInfrastructure(connectionString);
+builder.Services.AddInfrastructure(connectionString, builder.Environment.IsDevelopment());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

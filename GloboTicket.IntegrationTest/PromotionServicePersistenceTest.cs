@@ -29,7 +29,7 @@ public class PromotionServicePersistenceTest
             {
                 throw new ApplicationException($"Please set the environment variable {AppConnectionString}");
             }
-            serviceCollection.AddInfrastructure(connectionString);
+            serviceCollection.AddInfrastructure(connectionString, isDevelopment: true);
         });
         var host = builder.Build();
 
