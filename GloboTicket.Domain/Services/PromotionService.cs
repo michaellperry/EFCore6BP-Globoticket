@@ -74,6 +74,9 @@ public class PromotionService
     public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
     {
         var shows = await context.Set<Show>()
+            .Include(s => s.Venue)
+            .Include(s => s.Act)
+            .Include(s => s.TicketSales)
             .Where(s =>
                 s.Date >= start && s.Date < end &&
                 (s.Venue.Location == null || s.Venue.Location.IsWithinDistance(search, meters)))
