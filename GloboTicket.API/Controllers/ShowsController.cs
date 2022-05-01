@@ -2,6 +2,7 @@
 using GloboTicket.API.Models;
 using GloboTicket.API.Queries;
 using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GloboTicket.API.Controllers;
@@ -11,30 +12,56 @@ namespace GloboTicket.API.Controllers;
 public class ShowsController : ControllerBase
 {
     private readonly ListShowsQuery listShowsQuery;
+    private readonly PromotionService promotionService;
     private readonly RescheduleShowCommand rescheduleShowCommand;
 
-    public ShowsController(ListShowsQuery listShowsQuery, RescheduleShowCommand updateShowCommand)
+    public ShowsController(ListShowsQuery listShowsQuery, RescheduleShowCommand updateShowCommand, PromotionService promotionService)
     {
         this.listShowsQuery = listShowsQuery;
         this.rescheduleShowCommand = updateShowCommand;
+        this.promotionService = promotionService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ShowModel>>> GetShows()
+    public async Task<ActionResult<IEnumerable<ShowModel>>> GetShows(
+        [FromQuery] DateTimeOffset? start = null,
+        [FromQuery] DateTimeOffset? end = null,
+        [FromQuery] double? latitude = null,
+        [FromQuery] double? longitude = null,
+        [FromQuery] int? meters = null
+    )
     {
-        List<Show> shows = await listShowsQuery.Execute();
-        List<ShowModel> showModels = shows
-            .Select(show => new ShowModel
-            {
-                ActName = show.Act.Name,
-                VenueName = show.Venue.Name,
-                VenueAddress = show.Venue.Address,
-                Date = show.Date,
+        if (start is DateTimeOffset startVal &&
+            end is DateTimeOffset endVal &&
+            start <= end &&
+            latitude is double latitudeVal &&
+            longitude is double longitudeVal &&
+            meters is int metersVal &&
+            metersVal > 0)
+        {
+            var showResults = await promotionService.FindShowsByDistanceAndDateRange(
+                GeographicLocation(latitudeVal, longitudeVal),
+                metersVal,
+                startVal,
+                endVal
+            );
+            List<ShowModel> showModels = showResults
+                .Select(showResult => new ShowModel
+                {
+                    ActName = showResult.ActName,
+                    VenueName = showResult.VenueName,
+                    VenueAddress = showResult.VenueAddress,
+                    Date = showResult.Date,
 
-                HrefShow = Url.Action(nameof(UpdateShow), new { showGuid = show.ShowGuid })!
-            })
-            .ToList();
-        return Ok(showModels);
+                    HrefShow = Url.Action(nameof(UpdateShow), new { showGuid = showResult.ShowGuid })!
+                })
+                .ToList();
+            return Ok(showModels);
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 
     [HttpPatch]
