@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -75,6 +76,48 @@ public class PromotionServicePersistenceTest
         shows[0].VenueName.Should().Be(aac.Name);
         shows[0].ActName.Should().Be(act.Name);
         shows[0].SeatsAvailable.Should().Be(aac.SeatingCapacity-3);
+    }
+
+    [Fact]
+    public async Task GenerateTestData()
+    {
+        int venueCount = 1000;
+        int actCount = 300;
+        int ticketCount = 40;
+        var random = new Random();
+
+        var venues = new List<Venue>();
+        for (var v = 0; v < venueCount; v++)
+        {
+            var venue = await GivenVenue(name: $"Venue{v}", location: GeographicLocation(
+                random.NextDouble() * 20.0 + 30.0,
+                random.NextDouble() * 40.0 - 120.0
+            ));
+            venues.Add(venue);
+        }
+
+        var acts = new List<Act>();
+        for (var a = 0; a < actCount; a++)
+        {
+            var act = await GivenAct(name: $"Act{a}");
+            acts.Add(act);
+        }
+
+        var pairs =
+            from venue in venues
+            from act in acts
+            select (venue, act);
+
+        var shows = new List<Show>();
+        var today = DateTimeOffset.Now;
+        foreach (var (venue, act) in pairs)
+        {
+            var show = await GivenShow(venue.VenueGuid, act.ActGuid, today.AddDays(random.Next(1, 365)));
+            for (int t = 0; t < ticketCount; t++)
+            {
+                await GivenTicketSale(show.ShowGuid, random.Next(1, 4));
+            }
+        }
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
