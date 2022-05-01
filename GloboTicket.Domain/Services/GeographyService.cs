@@ -4,8 +4,8 @@ namespace GloboTicket.Domain.Services;
 
 public static class GeographyService
 {
-    public static Point GeographicLocation(double lattitude, double longitude)
+    public static Point GeographicLocation(double latitude, double longitude)
     {
-        return new Point(longitude, lattitude) { SRID = 4326 };
+        return new Point(longitude, latitude) { SRID = 4326 };
     }
 }
