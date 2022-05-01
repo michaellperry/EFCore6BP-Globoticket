@@ -18,6 +18,7 @@ public class PromotionServicePersistenceTest
     private const string AppConnectionString = "GLOBOTICKET_APP_CONNECTION_STRING";
 
     private PromotionService promotionService;
+    private SalesService salesService;
 
     public PromotionServicePersistenceTest()
     {
@@ -34,6 +35,7 @@ public class PromotionServicePersistenceTest
         var host = builder.Build();
 
         promotionService = host.Services.GetRequiredService<PromotionService>();
+        salesService = host.Services.GetRequiredService<SalesService>();
     }
 
     [Fact]
@@ -64,17 +66,12 @@ public class PromotionServicePersistenceTest
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
         var show = await GivenShow(aac.VenueGuid, act.ActGuid, date);
         await GivenShow(sr.VenueGuid, act.ActGuid, date);
-        GivenTicketSale(show.ShowGuid, 3);
+        await GivenTicketSale(show.ShowGuid, 3);
 
         Point search = GeographicLocation(33.0782868, -96.8104113);
         var shows = await WhenFindShowsByDistanceAndDateRange(search, 100_000, date, date.AddDays(1));
         shows.Count.Should().Be(1);
         shows[0].SeatsAvailable.Should().Be(aac.SeatingCapacity-3);
-    }
-
-    private void GivenTicketSale(Guid showGuid, int v)
-    {
-        throw new NotImplementedException();
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
@@ -110,5 +107,11 @@ public class PromotionServicePersistenceTest
     {
         Guid showGuid = Guid.NewGuid();
         return await promotionService.BookShow(showGuid, venueGuid, actGuid, date);
+    }
+
+    private async Task<TicketSale> GivenTicketSale(Guid showGuid, int quantity)
+    {
+        Guid ticketSaleGuid = Guid.NewGuid();
+        return await salesService.SellTickets(ticketSaleGuid, showGuid, quantity);
     }
 }
