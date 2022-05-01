@@ -62,12 +62,19 @@ public class PromotionServicePersistenceTest
             location: GeographicLocation(40.7552824, -111.8906558));
         Act act = await GivenAct();
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
-        await GivenShow(aac.VenueGuid, act.ActGuid, date);
+        var show = await GivenShow(aac.VenueGuid, act.ActGuid, date);
         await GivenShow(sr.VenueGuid, act.ActGuid, date);
+        GivenTicketSale(show.ShowGuid, 3);
 
         Point search = GeographicLocation(33.0782868, -96.8104113);
         var shows = await WhenFindShowsByDistanceAndDateRange(search, 100_000, date, date.AddDays(1));
         shows.Count.Should().Be(1);
+        shows[0].SeatsAvailable.Should().Be(aac.SeatingCapacity-3);
+    }
+
+    private void GivenTicketSale(Guid showGuid, int v)
+    {
+        throw new NotImplementedException();
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)

@@ -11,4 +11,5 @@ public class ShowResult
     public double? Distance { get; set; }
     public string ActName { get; set; } = "";
     public DateTimeOffset Date { get; set; }
+    public int SeatsAvailable { get; set; }
 }
