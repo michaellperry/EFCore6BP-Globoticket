@@ -9,6 +9,8 @@ public class Show
     public Act Act { get; set; }
     public DateTimeOffset Date { get; set; }
 
+    public ICollection<TicketSale> TicketSales { get; set; } = new List<TicketSale>();
+
     public Show(Venue venue, Act act)
     {
         Venue = venue;
