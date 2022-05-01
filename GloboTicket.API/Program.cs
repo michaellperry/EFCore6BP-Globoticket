@@ -1,4 +1,3 @@
-using GloboTicket.API;
 using GloboTicket.Infrastructure;
 using Microsoft.IdentityModel.Logging;
 
@@ -17,7 +16,6 @@ string connectionString = builder.Configuration
     .GetConnectionString("GloboTicketConnection")
     ?? throw new InvalidOperationException("Please provide a value for connection string GloboTicketConnection.");
 
-builder.Services.AddApi();
 builder.Services.AddInfrastructure(connectionString, builder.Environment.IsDevelopment());
 
 builder.Services.AddControllers();
