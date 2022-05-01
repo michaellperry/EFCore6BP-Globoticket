@@ -92,4 +92,16 @@ public class PromotionService
             .ToList();
         return showResults;
     }
+
+    public async Task RescheduleShow(Guid showGuid, DateTimeOffset date)
+    {
+        var show = context.Set<Show>().SingleOrDefault(s => s.ShowGuid == showGuid);
+        if (show is null)
+        {
+            throw new ArgumentException($"No show found for guid {showGuid}");
+        }
+
+        show.Date = date;
+        await context.SaveChangesAsync();
+    }
 }
