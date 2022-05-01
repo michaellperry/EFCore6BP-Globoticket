@@ -52,7 +52,7 @@ public class PromotionServicePersistenceTest
     }
 
     [Fact]
-    public async Task CanFindVenueByDistance()
+    public async Task CanFindShowByDistance()
     {
         Venue aac = await GivenVenue(
             name: "American Airlines Center",
@@ -66,7 +66,8 @@ public class PromotionServicePersistenceTest
         await GivenShow(sr.VenueGuid, act.ActGuid, date);
 
         Point search = GeographicLocation(33.0782868, -96.8104113);
-        var venues = await WhenFindShowsByDistanceAndDateRange(search, 50, date, date.AddDays(1));
+        var shows = await WhenFindShowsByDistanceAndDateRange(search, 100_000, date, date.AddDays(1));
+        shows.Count.Should().Be(1);
     }
 
     private async Task<Show> WhenBookShow(Guid venueGuid, Guid actGuid, DateTimeOffset date)
@@ -75,9 +76,9 @@ public class PromotionServicePersistenceTest
         return await promotionService.BookShow(showGuid, venueGuid, actGuid, date);
     }
 
-    private async Task<List<ShowResult>> WhenFindShowsByDistanceAndDateRange(Point search, int miles, DateTimeOffset start, DateTimeOffset end)
+    private async Task<List<ShowResult>> WhenFindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
     {
-        return await promotionService.FindShowsByDistanceAndDateRange(search, miles, start, end);
+        return await promotionService.FindShowsByDistanceAndDateRange(search, meters, start, end);
     }
 
     private async Task<Act> GivenAct(
