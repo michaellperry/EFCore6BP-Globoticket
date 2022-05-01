@@ -39,7 +39,7 @@ public class PromotionServicePersistenceTest
     [Fact]
     public async Task CanPersistAShow()
     {
-        Point location = new Point(-96.8124434, 32.7903953);
+        Point location = GeographicLocation(32.7903953, -96.8124434);
         Venue venue = await GivenVenue(location: location);
         Act act = await GivenAct();
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
@@ -56,16 +56,16 @@ public class PromotionServicePersistenceTest
     {
         Venue aac = await GivenVenue(
             name: "American Airlines Center",
-            location: new Point(-96.8124434, 32.7903953));
+            location: GeographicLocation(32.7903953, -96.8124434));
         Venue sr = await GivenVenue(
             name: "The State Room",
-            location: new Point(-111.8906558, 40.7552824));
+            location: GeographicLocation(40.7552824, -111.8906558));
         Act act = await GivenAct();
         DateTimeOffset date = DateTimeOffset.Parse("2022-07-27Z");
         await GivenShow(aac.VenueGuid, act.ActGuid, date);
         await GivenShow(sr.VenueGuid, act.ActGuid, date);
 
-        Point search = new Point(-96.8104113, 33.0782868);
+        Point search = GeographicLocation(33.0782868, -96.8104113);
         var venues = await WhenFindShowsByDistanceAndDateRange(search, 50, date, date.AddDays(1));
     }
 
