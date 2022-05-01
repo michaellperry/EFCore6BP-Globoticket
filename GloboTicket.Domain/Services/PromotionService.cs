@@ -1,4 +1,4 @@
-﻿using GloboTicket.Domain.Entities;
+using GloboTicket.Domain.Entities;
 using GloboTicket.Domain.Models;
 using NetTopologySuite.Geometries;
 using Microsoft.EntityFrameworkCore;
@@ -40,14 +40,15 @@ public class PromotionService
         return show;
     }
 
-    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address, Point? location)
+    public async Task<Venue> CreateVenue(Guid venueGuid, string name, string address, Point? location, int seatingCapacity)
     {
         var venue = new Venue
         {
             VenueGuid = venueGuid,
             Name = name,
             Address = address,
-            Location = location
+            Location = location,
+            SeatingCapacity = seatingCapacity
         };
 
         await context.AddAsync(venue);
@@ -73,6 +74,7 @@ public class PromotionService
     public async Task<List<ShowResult>> FindShowsByDistanceAndDateRange(Point search, int meters, DateTimeOffset start, DateTimeOffset end)
     {
         var shows = await context.Set<Show>()
+            .Include(s => s.TicketSales)
             .Where(s =>
                 s.Date >= start && s.Date < end &&
                 (s.Venue.Location == null || s.Venue.Location.IsWithinDistance(search, meters)))
@@ -87,7 +89,8 @@ public class PromotionService
                 VenueLocation = s.Venue.Location,
                 Distance = s.Venue.Location?.Distance(search),
                 ActName = s.Act.Name,
-                Date = s.Date
+                Date = s.Date,
+                SeatsAvailable = s.Venue.SeatingCapacity - s.TicketSales.Sum(ts => ts.Quantity)
             })
             .ToList();
         return showResults;
