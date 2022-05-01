@@ -87,6 +87,7 @@ public class PromotionService
                 s.Date >= start && s.Date < end &&
                 (s.Venue.Location == null || s.Venue.Location.IsWithinDistance(search, meters)))
             .OrderBy(s => s.Venue.Location!.Distance(search))
+            .TagWithCallSite()
             .ToListAsync();
         var showResults = shows
             .Select(s => new ShowResult
