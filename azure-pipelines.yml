@@ -21,6 +21,8 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Compile EF model'
+  env:
+     GLOBOTICKET_ADMIN_CONNECTION_STRING: 'Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;'
   inputs:
     command: 'custom'
     custom: 'ef'
