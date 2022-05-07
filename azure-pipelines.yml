@@ -13,6 +13,13 @@ steps:
     version: 6.0.x
 
 - task: DotNetCoreCLI@2
+  displayName: 'Install EF tools'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef'
+
+- task: DotNetCoreCLI@2
   displayName: 'Compile EF model'
   inputs:
     command: 'custom'
