@@ -13,6 +13,22 @@ steps:
     version: 8.0.x
 
 - task: DotNetCoreCLI@2
+  displayName: 'Install EF tools'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Compile EF model'
+  env:
+    GLOBOTICKET_ADMIN_CONNECTION_STRING: 'Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;'
+  inputs:
+    command: 'custom'
+    custom: 'ef'
+    arguments: 'dbcontext optimize -p ./GloboTicket.Infrastructure -s ./GloboTicket.API'
+
+- task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
     command: 'build'
