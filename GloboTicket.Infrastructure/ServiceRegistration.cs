@@ -1,5 +1,6 @@
 ﻿using GloboTicket.Domain;
 using GloboTicket.Infrastructure.Configuration;
+using GloboTicket.Infrastructure.GloboTicket.Domain.CompiledModels;
 using GloboTicket.SharedKernel.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,10 @@ public static class ServiceRegistration
             if (isDevelopment)
             {
                 options.EnableSensitiveDataLogging();
+            }
+            else
+            {
+                options.UseModel(GloboTicketContextModel.Instance);
             }
         });
         services.AddDomain();
