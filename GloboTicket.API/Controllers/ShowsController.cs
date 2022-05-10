@@ -1,5 +1,4 @@
-﻿using GloboTicket.API.Commands;
-using GloboTicket.API.Models;
+﻿using GloboTicket.API.Models;
 using GloboTicket.Domain.Models;
 using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +46,13 @@ public class ShowsController : ControllerBase
         {
             return BadRequest();
         }
+    }
+
+    [HttpGet]
+    [Route("{showGuid}")]
+    public async Task<ActionResult<ShowModel>> GetShow([FromRoute]Guid showGuid)
+    {
+        throw new NotImplementedException();
     }
 
     [HttpPatch]
