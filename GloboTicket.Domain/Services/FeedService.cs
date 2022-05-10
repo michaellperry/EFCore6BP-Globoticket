@@ -13,9 +13,9 @@ public class FeedService
         this.context = context;
     }
 
-    public async Task<List<ShowInfo>> ListShows()
+    public IAsyncEnumerable<ShowInfo> ListShows()
     {
-        var shows = await context.Set<Show>()
+        var shows = context.Set<Show>()
             .Select(show => new ShowInfo
             {
                 ShowGuid = show.ShowGuid,
@@ -23,7 +23,7 @@ public class FeedService
                 VenueGuid = show.Venue.VenueGuid,
                 Date = show.Date
             })
-            .ToListAsync();
+            .AsAsyncEnumerable();
         return shows;
     }
 }
