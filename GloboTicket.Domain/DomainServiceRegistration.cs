@@ -9,6 +9,7 @@ public static class DomainServiceRegistration
     {
         services.AddScoped<PromotionService>();
         services.AddScoped<SalesService>();
+        services.AddScoped<FeedService>();
         return services;
     }
 }
