@@ -17,9 +17,9 @@ public class FeedController : Controller
 
     [HttpGet]
     [Route("shows")]
-    public async Task<ActionResult<List<ShowInfo>>> ShowsFeed()
+    public ActionResult<IAsyncEnumerable<ShowInfo>> ShowsFeed()
     {
-        var shows = await feedService.ListShows();
+        var shows = feedService.ListShows();
         return Ok(shows);
     }
 }
