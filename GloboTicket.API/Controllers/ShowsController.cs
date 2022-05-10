@@ -1,5 +1,4 @@
-﻿using GloboTicket.API.Commands;
-using GloboTicket.API.Models;
+﻿using GloboTicket.API.Models;
 using GloboTicket.Domain.Models;
 using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
