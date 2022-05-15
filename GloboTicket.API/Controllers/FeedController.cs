@@ -1,4 +1,5 @@
-﻿using GloboTicket.Domain.Models;
+﻿using GloboTicket.API.Models;
+using GloboTicket.Domain.Models;
 using GloboTicket.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,25 @@ public class FeedController : Controller
 
     [HttpGet]
     [Route("shows")]
-    public ActionResult<IAsyncEnumerable<ShowInfo>> ShowsFeed()
+    public ActionResult<IAsyncEnumerable<ShowItem>> ShowsFeed()
     {
         var shows = feedService.ListShows();
-        return Ok(shows);
+        var showItems = shows.Select(show => new ShowItem
+        {
+            HrefShow = Url.Action(
+                "GetShow",
+                "Shows",
+                new { showGuid = show.ShowGuid })!,
+            HrefAct = Url.Action(
+                "GetAct",
+                "Acts",
+                new { actGuid = show.ActGuid })!,
+            HrefVenue = Url.Action(
+                "GetVenue",
+                "Venues",
+                new { venueGuid = show.VenueGuid })!,
+            Date = show.Date
+        });
+        return Ok(showItems);
     }
 }
