@@ -48,6 +48,13 @@ public class ShowsController : ControllerBase
         }
     }
 
+    [HttpGet]
+    [Route("{showGuid}")]
+    public async Task<ActionResult<ShowModel>> GetShow([FromRoute]Guid showGuid)
+    {
+        throw new NotImplementedException();
+    }
+
     [HttpPatch]
     [Route("{showGuid}")]
     public async Task<ActionResult> UpdateShow([FromRoute]Guid showGuid, [FromBody] ShowPatchModel showPatch)
