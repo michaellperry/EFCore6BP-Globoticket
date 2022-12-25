@@ -1,4 +1,3 @@
-using GloboTicket.Domain.Entities;
 using GloboTicket.SharedKernel.Configuration;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +7,7 @@ public class GloboTicketContext : DbContext
 {
     private readonly IModelConfiguration modelConfiguration;
 
-    public GloboTicketContext(DbContextOptions<GloboTicketContext> options, IModelConfiguration modelConfiguration) :
+    public GloboTicketContext(DbContextOptions options, IModelConfiguration modelConfiguration) :
         base(options)
     {
         this.modelConfiguration = modelConfiguration;
