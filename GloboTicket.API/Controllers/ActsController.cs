@@ -3,13 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GloboTicket.API.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class ActsController : Controller
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     [HttpGet]
     [Route("{actGuid}")]
     public async Task<ActionResult<ActModel>> GetAct([FromRoute] Guid actGuid)
