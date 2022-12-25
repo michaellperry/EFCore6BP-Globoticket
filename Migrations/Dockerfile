@@ -22,7 +22,7 @@ RUN dotnet build GloboTicket.API/GloboTicket.API.csproj -c Release --no-restore
 
 # Build the migration bundle
 ENV GLOBOTICKET_ADMIN_CONNECTION_STRING="Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;"
-RUN dotnet ef migrations bundle -p ./GloboTicket.Infrastructure -s ./GloboTicket.API --configuration Release --no-build --self-contained
+RUN dotnet ef migrations bundle -p ./GloboTicket.Infrastructure -s ./GloboTicket.API --context GloboTicket.Infrastructure.Configuration.SqlGloboTicketContext --configuration Release --no-build --self-contained
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0-jammy AS run
 
