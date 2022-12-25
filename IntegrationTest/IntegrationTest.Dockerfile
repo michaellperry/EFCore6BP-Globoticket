@@ -41,7 +41,7 @@ RUN dotnet test --no-build -c Release ./GloboTicket.UnitTest
 
 # Build the migration bundle
 ENV GLOBOTICKET_ADMIN_CONNECTION_STRING="Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;"
-RUN dotnet ef migrations bundle -p ./GloboTicket.Infrastructure -s ./GloboTicket.API --configuration Release --no-build
+RUN dotnet ef migrations bundle -p ./GloboTicket.Infrastructure -s ./GloboTicket.API --context GloboTicketContext --configuration Release --no-build
 RUN cp ./GloboTicket.API/appsettings.json .
 
 # Run the integration tests
