@@ -108,7 +108,7 @@ docker run --name globoticket-migrations -it --rm --entrypoint /bin/bash globoti
 To run migrations:
 
 ```
-docker run --name globoticket-migrations -it --rm globoticket/migrations:latest -e GLOBOTICKET_ADMIN_CONNECTION_STRING=Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;
+docker run --name globoticket-migrations -it --rm globoticket/migrations:latest -e GLOBOTICKET_ADMIN_CONNECTION_STRING="Server=tcp:mssql;Database=GloboTicket;User=sa;Password=notused;TrustServerCertificate=True;"
 ```
 
 ## Create a Release Pipeline
