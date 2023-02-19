@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using GloboTicket.Domain;
+using GloboTicket.Infrastructure;
+using GloboTicket.Infrastructure.Configuration;
 
 namespace GloboTicket.API.DesignTime;
 
@@ -20,6 +22,6 @@ public class GloboTicketContextFactory : IDesignTimeDbContextFactory<GloboTicket
         var options = new DbContextOptionsBuilder<GloboTicketContext>()
             .UseSqlServer(connectionString)
             .Options;
-        return new GloboTicketContext(options, new DesignTimeModelConfiguration());
+        return new GloboTicketContext(options, new SqlModelConfiguration());
     }
 }

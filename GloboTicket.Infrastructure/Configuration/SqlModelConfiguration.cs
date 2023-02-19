@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GloboTicket.Infrastructure.Configuration;
 
-internal class SqlModelConfiguration : IModelConfiguration
+public class SqlModelConfiguration : IModelConfiguration
 {
     public void ConfigureModel(ModelBuilder modelBuilder)
     {
