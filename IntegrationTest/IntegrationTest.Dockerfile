@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 # Restore packages
 WORKDIR /source
@@ -10,7 +10,7 @@ COPY GloboTicket.Infrastructure/*.csproj  ./GloboTicket.Infrastructure/
 COPY GloboTicket.IntegrationTest/*.csproj ./GloboTicket.IntegrationTest/
 COPY GloboTicket.SharedKernel/*.csproj    ./GloboTicket.SharedKernel/
 COPY GloboTicket.UnitTest/*.csproj        ./GloboTicket.UnitTest/
-RUN dotnet restore
+RUN dotnet restore --runtime linux-x64
 
 # Build and unit test
 COPY GloboTicket.API/             ./GloboTicket.API/
