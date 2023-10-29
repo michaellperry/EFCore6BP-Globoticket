@@ -90,3 +90,18 @@ Occasionally you will need to add SQL-Server specific configuration.
 These belong in the Infrastructure project.
 Create a class that implements the `IEntityTypeConfiguration<T>` interface in the Configuration folder.
 This gives you access to SQL-Server configurations.
+
+## Run Integration Tests
+
+Integration tests run in a pair of Docker containers.
+The Docker compose file in the 'IntegrationTest' folder defines the containers.
+Run the following commands to build and run the containers:
+
+```
+docker pull mcr.microsoft.com/mssql/server:2019-latest
+docker build -t globoticket/integration-test:latest -f .\IntegrationTest\IntegrationTest.Dockerfile .
+cd .\IntegrationTest
+docker-compose up --abort-on-container-exit
+docker-compose down -v
+cd ..
+```
