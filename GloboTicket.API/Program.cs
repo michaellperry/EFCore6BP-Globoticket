@@ -4,7 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 string connectionString = builder.Configuration
-    .GetConnectionString("GloboTicketConnection");
+    .GetConnectionString("GloboTicketConnection")
+    ?? throw new InvalidOperationException("Please provide a value for connection string GloboTicketConnection.");
+
 builder.Services.AddInfrastructure(connectionString);
 
 builder.Services.AddControllers();
