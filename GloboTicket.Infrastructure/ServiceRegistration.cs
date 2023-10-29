@@ -22,6 +22,7 @@ public static class ServiceRegistration
             {
                 sqlOptions.MigrationsAssembly(
                     typeof(ServiceRegistration).Assembly.FullName);
+                sqlOptions.UseNetTopologySuite();
             });
         });
         services.AddDomain();
